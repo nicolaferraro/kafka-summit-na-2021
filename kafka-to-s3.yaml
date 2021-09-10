@@ -1,0 +1,28 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: kafka-to-s3
+spec:
+  source:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: kafka-source
+    properties:
+      user: <service-account>
+      password: <password>
+      bootstrapServers: <server>
+      topic: chatbot-x
+      consumerGroup: uploader
+  sink:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: aws-s3-streaming-upload-sink
+    properties:
+      accessKey: <access-key>
+      bucketNameOrArn: "camel-k"
+      keyName: "chat-messages"
+      region: "eu-west-1"
+      secretKey: <secret-key>
+      batchMessageNumber: 5
